@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <style>
+        .coluna {
+            flex: 1; /* Divide igualmente o espaço */
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+    </style>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+        <br><br>
+        <h1>Batidas do Relógio Ponto</h1>
+        <div style="display: flex; flex-wrap: nowrap;">
+            <table class="table">
+                <form action="{% url 'adicionar_horario' %}" method="POST"> {% csrf_token %}
+                    <tr>
+                        <td class="coluna">
+                            <label for="">Data:</label>
+                            <input type="date" name="data" class="form-control" placeholder="Digite a Data">
+                        </td>
+                        <td class="coluna">
+                            <label for="">Entrada 1:</label>
+                            <input type="time" name="entrada_1" class="form-control" placeholder="Digite a Entrada 1">
+                        </td>
+                        <td class="coluna">
+                            <label for="">Saída 1:</label>
+                            <input type="text" name="saida_1" class="form-control" placeholder="Digite a Saída 1">
+                        </td>
+                        <td class="coluna">
+                            <label for="">Entrada 2:</label>
+                            <input type="text" name="entrada_2" class="form-control" placeholder="Digite a Entrada 2">
+                        </td>
+                        <td class="coluna">
+                            <label for="">Saída 2:</label>
+                            <input type="text" name="saida_2" class="form-control" placeholder="Digite a Saída 2">
+                        </td>
+                        <td class="coluna">
+                            <label for="">Entrada 3:</label>
+                            <input type="text" name="entrada_3" class="form-control" placeholder="Digite a Entrada 3">
+                        </td>
+                        <td class="coluna">
+                            <label for="">Saída 3:</label>
+                            <input type="text" name="saida_3" class="form-control" placeholder="Digite a Saída 3">
+                        </td>
+                        <td class="coluna" style="vertical-align: bottom;">
+                            <input type="submit" value="Incluir Horário" class="btn btn-success">
+                        </td>
+                    </tr>
+                </form>
+            </table>
+        </div>
+        <hr>
+        <div style="display: flex; flex-wrap: nowrap;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Data</th>
+                    <th scope="col">Entrada 1</th>
+                    <th scope="col">Saída 1</th>
+                    <th scope="col">Entrada 2</th>
+                    <th scope="col">Saída 2</th>
+                    <th scope="col">Entrada 3</th>
+                    <th scope="col">Saída 3</th>
+                    <th scope="col">Horas Trabalhadas</th>
+                    <th scope="col">Ação</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for i in horarios %}
+                    <tr>
+                        <form action="{% url 'atualizar_horario' i.id %}" method="POST"> {% csrf_token %}
+                        <th class="coluna">{{i.entrada_1|date:'d/m'}}</th>
+                        <td class="coluna">
+                            <input type="text" name="entrada_1" value="{{i.entrada_1|time:'H:i'}}" class="form-control">
+                        </td>
+                        <td class="coluna">
+                            <input type="text" name="saida_1" value="{{i.saida_1|time:'H:i'}}" class="form-control">
+                        </td>
+                        <td class="coluna">
+                            <input type="text" name="entrada_2" value="{{i.entrada_2|time:'H:i'}}" class="form-control">
+                        </td>
+                        <td class="coluna">
+                            <input type="text" name="saida_2" value="{{i.saida_2|time:'H:i'}}" class="form-control">
+                        </td>
+                        <td class="coluna">
+                            <input type="text" name="entrada_3" value="{{i.entrada_3|time:'H:i'}}" required="False" class="form-control">
+                        </td>
+                        <td class="coluna">
+                            <input type="text" name="saida_3" value="{{i.saida_3|time:'H:i'}}" class="form-control">
+                        </td>
+                        <td class="coluna">
+                            <label for="" class="form-control">08:48</label>
+                        </td>
+                        <td class="coluna">
+                            <input type="submit" value="Atualizar" class="btn btn-primary"></input>
+                            <a href="{% url 'excluir_horario' i.id %}" class="btn btn-danger">Excluir</a>
+                        </td>
+                        <input type="hidden" name="data_atualizacao" value="{{i.entrada_1|date:'Y-m-d'}}"></input>
+                        </form>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>
